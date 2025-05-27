@@ -21,41 +21,47 @@ struct ContentView: View {
                     taskListSection
                 }
             }
-            .navigationTitle("Daily Tasks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingAddTask = true }) {
                         Image(systemName: "plus")
                             .font(.title2)
-                            .foregroundColor(.blue)
                     }
                 }
             }
+            .navigationTitle("Hey, John")
             .sheet(isPresented: $showingAddTask) {
                 addTaskSheet
             }
         }
     }
+
     
     // Bible verse display with elegant styling
     private var bibleVerseSection: some View {
         VStack(spacing: 20){
             if let verse = verseManager.currentVerse {
-                VStack(spacing:10){
-                    Text(verse.text)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                    
-                    Text(verse.refernce)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .padding()
+                VStack(alignment: .center, spacing: 10){ // Add alignment: .top
+                    VStack(spacing: 10){
+                        Text(verse.text)
+                            .font(.body)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        
+                        Text(verse.reference)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
+                    Button(action: { reloadVerse() }){
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.title2)
+                            .foregroundColor(.blue)
+                    }
+                }.padding()
             } else {
                 Text("Loading verse...")
             }
-                
         }
     }
     
@@ -135,5 +141,9 @@ struct ContentView: View {
                 }
             }
         }
+    }
+    
+    private func reloadVerse() {
+        verseManager.selectRandomVerse()
     }
 }

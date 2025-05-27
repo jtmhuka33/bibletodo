@@ -10,5 +10,5 @@ import SwiftData
 struct Verse: Identifiable, Codable {
     let id = UUID()
     var text: String
-    var refernce: String
+    var reference: String
 }

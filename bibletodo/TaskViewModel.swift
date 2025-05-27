@@ -14,12 +14,10 @@ import Combine //TODO: What does this do?
 class TaskViewModel: ObservableObject {
     // @Published tells swiftUI to update the UI when these variables change
     @Published var tasks: [Task] = []
-    @Published var bibleVerse: String = "Loading inspirational verse"
     
     //TODO: what does this do?
     init(){
         loadTasks()
-        fetchBibleVerse()
     }
     
     var tasksByDate: [String: [Task]]{
@@ -46,34 +44,13 @@ class TaskViewModel: ObservableObject {
         saveTasks()
     }
     
-    /**
-     
-     */
+
     private func saveTasks(){
         if let data = try? JSONEncoder().encode(tasks){
             UserDefaults.standard.set(data, forKey: "savedTasks")
         }
     }
-    
-    /**
-      TODO: analyse this code line for line and understand whats happening
-     */
-    func fetchBibleVerse() {
-            guard let url = URL(string: "https://bible-api.com/random") else { return }
-            
-            URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-                guard let data = data, error == nil else { return }
-                
-                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let text = json["text"] as? String,
-                   let reference = json["reference"] as? String {
-                    
-                    DispatchQueue.main.async {
-                        self?.bibleVerse = "\"\(text)\" - \(reference)"
-                    }
-                }
-            }.resume()
-        }
+
     
     func loadTasks(){
         if let data = UserDefaults.standard.data(forKey: "savedTasks"),

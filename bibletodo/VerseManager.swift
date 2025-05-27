@@ -17,7 +17,9 @@ class VerseManager: ObservableObject{
     }
     
     private func loadVerses () {
+        print("Attempting to load verses...")
         guard let url = Bundle.main.url(forResource: "verses", withExtension: "json") else {
+            print("File not found")
             print("verses.json file not found")
             return
         }
